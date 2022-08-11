@@ -87,18 +87,38 @@ https://d2iq.com/blog/docker-vs-kubernetes-vs-apache-mesos
 * docker network create
 dsdsdsd
 
+### compartilhando volume do host com o container
+
+- docker run ... -> cria novos containers
+- docker run nginx
+- docker run -p 8000:80 nginx -> cria container que tem a porta 80 do container mapeado para a 8000 do host
+- docker run -d -p 8000:80 nginx -> não trava o teclado
+
+- Com o container rodando:
+- docker exec -it {id_do_cont} bash -> entra no SO do container
+  - apt-get update
+  - apt-get install vim
+
+- docker commit {id_do_cont} {nome_da_nova_image} -> cria uma nova imagem com as alterações feitas no container
+
+### Dockerfile
+
+```
+FROM nginx:latest
+
+RUN apt-get update -y
+RUN apt-get install vim -y
+
+COPY index.html /usr/share/nginx/html/
+
+RUN ls -la /usr/share/nginx/html/
+```
+- docker build . -t nginx-coruja -> cria uma image a partir do Dockerfile
+
+- docker run -p 5000:80 nginx-coruja -> cria container que tem a porta 80 do container mapeado para a 5000 do host
+- docker build . -t nginx-coruja-sem-index
+
+- Mapeamento de Volumes -> Um volume local no host pode compartilhar com um volume dentro do container
+- docker run -p 5000:80 -v $(pwd):/usr/share/nginx/html nginx-coruja-sem-index  
+
 ## Docker-compose
-
-
-
-
-
-
-
-
-
-
-
-
-
-
